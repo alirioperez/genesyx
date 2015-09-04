@@ -1,0 +1,7 @@
+## entity.vm
+
+package $package;
+
+public class $entity.get("name") extends $entity.get("name")$entityPostfix
+{
+}

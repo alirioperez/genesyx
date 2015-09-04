@@ -1,0 +1,14 @@
+## dao.vm
+
+package $package;
+
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import $entityPackage;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Generated class. Don't modify it as you can lose your changes in the build process.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+public interface $entity.get("name")$daoPostfix extends PagingAndSortingRepository<$entity.get("name"), Long>
+{
+}

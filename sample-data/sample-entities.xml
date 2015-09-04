@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="com.seabware.domain.model">
+
+    <entity name="Person" table="person">
+        <description>Person entity</description>
+        <attributes>
+            <attribute name="firstName" type="String" length="255" required="true"/>
+            <attribute name="lastName" type="String" length="255" required="true"/>
+        </attributes>
+    </entity>
+
+    <entity name="User" table="user">
+		<description>User entity</description>
+        <attributes>
+            <attribute name="username" type="String" length="255" not-null="true"/>
+            <attribute name="password" type="String" length="255" not-null="true" encrypted="true"/>
+            <attribute name="supervisor" type="User"/>
+        </attributes>
+
+        <associations>
+            <association
+                relationship="many-to-one"
+                name="departments"
+                type="Department"
+                join-column="department_id"
+                not-null="true"
+                cascade="all"
+                fetch="lazy"
+            />
+            <association
+                    relationship="one-to-many"
+                    name="profiles"
+                    type="User"
+                    not-null="true"
+                    cascade="all"
+                    fetch="lazy"
+                    mapped-by="user"
+            />
+            <association
+                relationship="enumerated"
+                name="unitOfMeasure"
+                type="UnitOfMeasureEnum"
+                value="string"
+            />
+        </associations>
+	</entity>
+</model>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="com.seabware.domain.model">
+	<entity name="Customer" extends="Person">
+		<description>Customer entity</description>
+	</entity>
+</model>

@@ -1,0 +1,127 @@
+## entity.vm
+
+package $package;
+
+import java.util.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import com.seabware.framework.domain.model.AbstractBaseEntity;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Generated class. Don't modify it as you can lose your changes in the build process.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+@Entity
+#if ($entity.get("extends"))
+public abstract class $entity.get("name")$entityPostfix extends $entity.get("extends")
+#else
+public abstract class $entity.get("name")$entityPostfix extends AbstractBaseEntity
+#end
+{
+
+	// ----------
+	// ATTRIBUTES
+	// ----------
+
+#foreach($att in $entity.attributes)
+	private $att.get("type") $att.get("name");
+#end
+#foreach($assoc in $entity.associations)
+#if ($assoc.get("relationship") == "many-to-one")
+    private Set<$assoc.get("type")> $assoc.get("name") = new HashSet<$assoc.get("type")>;
+#else
+    private $assoc.get("type") $assoc.get("name");
+#end
+#end
+
+	// ------------------------------------
+	// GETTERS & SETTERS FOR REGULAR FIELDS
+	// ------------------------------------
+
+#foreach ($att in $entity.attributes)
+#if ($att.get("not-null") == "true")
+    @NotNull
+#end
+#set ($varColumn = "")
+#if ($att.get("length"))
+#set ($varColumn = $varColumn + ", length=" + $att.get("length"))
+#end
+#if ($att.get("unique"))
+#set ($$varColumn = $$varColumn + ", unique=" + $att.get("unique"))
+#end
+#if ($varColumn != "")
+#set ($varColumn = "(" + $utility.removeLeadingChars($varColumn, 2) + ")")
+#end
+#if ($varColumn != "")
+    @Column$varColumn
+#end
+	public $att.get("type") get$utility.firstToUpperCase($att.get("name"))()
+	{
+		return this.$att.get("name");
+	}	
+
+	public void set$utility.firstToUpperCase($att.get("name"))($att.get("type") $att.get("name"))
+	{    
+		this.$att.get("name") = $att.get("name");
+	}
+
+#end
+
+    // ----------------------------------
+    // GETTERS & SETTERS FOR ASSOCIATIONS
+    // ----------------------------------
+
+#foreach($assoc in $entity.associations)
+#if ($assoc.get("not-null") == "true")
+    @NotNull
+#end
+#if ($assoc.get("relationship") == "many-to-one")
+#set ($varManyToOne = "")
+#if ($assoc.get("cascade") != "")
+#set ($varManyToOne = $varManyToOne + ", cascade=CascadeType." + $utility.toUpperCase($assoc.get("cascade")))
+#end
+#if ($assoc.get("fetch") != "")
+#set ($varManyToOne = $varManyToOne + ", fetch=FetchType." + $utility.toUpperCase($assoc.get("fetch")))
+#end
+#if ($varManyToOne != "")
+#set ($varManyToOne = "(" + $utility.removeLeadingChars($varManyToOne, 2) + ")")
+#end
+    @ManyToOne$varManyToOne
+#if ($assoc.get("join-column") != "")
+    @JoinColumn(name="$assoc.get("join-column")")
+#end
+#end
+#if ($assoc.get("relationship") == "one-to-many")
+#set ($varOneToMany = "")
+#if ($assoc.get("mapped-by") != "")
+#set ($varOneToMany = $varOneToMany + ", mappedBy=""" + $assoc.get("mapped-by") + """")
+#end
+#if ($assoc.get("cascade") != "")
+#set ($varOneToMany = $varOneToMany + ", cascade=CascadeType." + $utility.toUpperCase($assoc.get("cascade")))
+#end
+#if ($assoc.get("fetch") != "")
+#set ($varOneToMany = $varOneToMany + ", fetch=FetchType." + $utility.toUpperCase($assoc.get("fetch")))
+#end
+#if ($varOneToMany != "")
+#set ($varOneToMany = "(" + $utility.removeLeadingChars($varOneToMany, 2) + ")")
+#end
+    @OneToMany$varOneToMany
+#end
+#if ($assoc.get("relationship") == "enumerated")
+#set ($varEnumerated = "")
+#if ($assoc.get("value") != "")
+#set ($varEnumerated = "(EnumType." + $utility.toUpperCase($assoc.get("value")) + ")" )
+#end
+    @Enumerated$varEnumerated
+#end
+    public $assoc.get("type") get$utility.firstToUpperCase($assoc.get("name"))()
+	{
+		return this.$assoc.get("name");
+	}
+
+	public void set$utility.firstToUpperCase($assoc.get("name"))($assoc.get("type") $assoc.get("name"))
+	{
+		this.$assoc.get("name") = $assoc.get("name");
+	}
+
+#end
+}
